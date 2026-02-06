@@ -38,12 +38,12 @@ pub async fn seed_data(pool: &DbPool) -> anyhow::Result<()> {
             
         let user_id = result.last_insert_id();
         
-        let admin_role = sqlx::query_as::<_, Role>("SELECT * FROM roles WHERE name = 'ROLE_ADMIN'")
+        let admin_role = sqlx::query_as::<sqlx::MySql, Role>("SELECT * FROM roles WHERE name = 'ROLE_ADMIN'")
             .fetch_one(pool)
             .await?;
             
         sqlx::query("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)")
-            .bind(user_id as i32)
+            .bind(user_id as i64)
             .bind(admin_role.id)
             .execute(pool)
             .await?;

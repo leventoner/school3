@@ -4,7 +4,7 @@ use axum::{
     http::{StatusCode, HeaderMap},
     response::IntoResponse,
     async_trait,
-    extract::FromRequestParts,
+    extract::{FromRequestParts, FromRef},
 };
 use axum::http::request::Parts;
 use crate::db::DbPool;
@@ -39,7 +39,7 @@ where
 {
     type Rejection = (StatusCode, Json<serde_json::Value>);
 
-    async fn from_request_parts(parts: &Parts, state: &S) -> Result<Self, Self::Rejection> {
+    async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
         let pool = DbPool::from_ref(state);
         let headers = HeaderMap::from_request_parts(parts, state).await.map_err(|_| (StatusCode::UNAUTHORIZED, Json(serde_json::json!({"message": "Invalid headers"}))))?;
         
@@ -58,11 +58,11 @@ where
             &Validation::default(),
         ).map_err(|_| (StatusCode::UNAUTHORIZED, Json(serde_json::json!({"message": "Invalid token"}))))?;
 
-        let user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE username = ?")
+        let user = sqlx::query_as::<sqlx::MySql, User>("SELECT * FROM users WHERE username = ?")
             .bind(&token_data.claims.sub)
             .fetch_optional(&pool)
             .await
-            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?
+            .map_err(|e: sqlx::Error| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?
             .ok_or((StatusCode::UNAUTHORIZED, Json(serde_json::json!({"message": "User not found"}))))?;
 
         Ok(CurrentUser(user))

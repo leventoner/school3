@@ -38,11 +38,11 @@ pub async fn signin(
     State(pool): State<DbPool>,
     Json(payload): Json<LoginRequest>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE username = ?")
+    let user = sqlx::query_as::<sqlx::MySql, User>("SELECT * FROM users WHERE username = ?")
         .bind(&payload.username)
         .fetch_optional(&pool)
         .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?
+        .map_err(|e: sqlx::Error| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?
         .ok_or((StatusCode::UNAUTHORIZED, Json(serde_json::json!({"message": "Incorrect username or password"}))))?;
 
     if !verify_password(&payload.password, &user.password).map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))? {
@@ -51,13 +51,13 @@ pub async fn signin(
 
     let token = create_jwt(&user.username).map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?;
 
-    let roles = sqlx::query_as::<_, Role>(
+    let roles = sqlx::query_as::<sqlx::MySql, Role>(
         "SELECT r.* FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?"
     )
     .bind(user.id)
     .fetch_all(&pool)
     .await
-    .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?;
+    .map_err(|e: sqlx::Error| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?;
 
     let role_names = roles.into_iter().map(|r| r.name).collect();
 
@@ -129,11 +129,11 @@ pub async fn signup(
     }
 
     for role_name in roles_to_assign {
-        let role = sqlx::query_as::<_, Role>("SELECT * FROM roles WHERE name = ?")
+        let role = sqlx::query_as::<sqlx::MySql, Role>("SELECT * FROM roles WHERE name = ?")
             .bind(role_name)
             .fetch_one(&pool)
             .await
-            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?;
+            .map_err(|e: sqlx::Error| (StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json!({"error": e.to_string()}))))?;
 
         sqlx::query("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)")
             .bind(user_id as i64)
