@@ -18,7 +18,7 @@ services:
 
   backend:
     container_name: school3-backend-prod
-    image: ${DOCKERHUB_USERNAME}/school3-backend:latest
+    image: leventoner/school3-backend:latest
     restart: on-failure
     ports:
       - "8084:8083"
@@ -30,7 +30,7 @@ services:
 
   frontend:
     container_name: school3-frontend-prod
-    image: ${DOCKERHUB_USERNAME}/school3-frontend:latest
+    image: leventoner/school3-frontend:latest
     restart: on-failure
     ports:
       - "3001:80"
