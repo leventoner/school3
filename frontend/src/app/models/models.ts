@@ -11,7 +11,7 @@ export enum Course {
     CLOUD_COMPUTING = "CLOUD_COMPUTING"
 }
 
-export enum GradeValue {
+export enum Grade {
     A = "A",
     B = "B",
     C = "C",
