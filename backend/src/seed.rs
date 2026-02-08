@@ -1,6 +1,7 @@
 use crate::db::DbPool;
 use crate::models::{Role, User};
 use crate::auth::hash_password;
+use sqlx::Row;
 
 pub async fn seed_data(pool: &DbPool) -> anyhow::Result<()> {
     // Seed Roles
