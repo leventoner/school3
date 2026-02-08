@@ -128,7 +128,6 @@ pub async fn seed_data(pool: &DbPool) -> anyhow::Result<()> {
         }
     }
 
-    }
 
     // Seed Attendance
     let att_exists = sqlx::query("SELECT 1 FROM attendance LIMIT 1")
