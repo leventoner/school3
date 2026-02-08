@@ -1,4 +1,3 @@
-@echo off
 echo [1/2] Pulling latest images from Docker Hub...
 docker-compose -f docker-compose.prod.yml pull
 
@@ -8,4 +7,3 @@ docker-compose -f docker-compose.prod.yml up -d
 
 echo.
 echo --- Update complete! ---
-pause

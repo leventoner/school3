@@ -5,16 +5,21 @@ import { CommonModule } from '@angular/common';
 import { User } from '../../models/models';
 
 @Component({
-    selector: 'app-header',
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    template: `
+  selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  template: `
     <header class="bg-indigo-600 text-white shadow-lg">
       <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <a routerLink="/" class="text-2xl font-bold tracking-tight">Student Management</a>
         <nav>
           <ul class="flex space-x-6 items-center">
             <li><a routerLink="/students" class="hover:text-indigo-200 transition">Students</a></li>
+            <li><a routerLink="/teachers" class="hover:text-indigo-200 transition">Teachers</a></li>
+            <li><a routerLink="/classrooms" class="hover:text-indigo-200 transition">Classrooms</a></li>
+            <li><a routerLink="/library" class="hover:text-indigo-200 transition">Library</a></li>
+            <li><a routerLink="/attendance" class="hover:text-indigo-200 transition">Attendance</a></li>
+            <li><a routerLink="/grades" class="hover:text-indigo-200 transition">Grades</a></li>
             <li *ngIf="showAdminBoard"><a routerLink="/add" class="hover:text-indigo-200 transition">Add Student</a></li>
             
             <li *ngIf="!currentUser" class="ml-4 flex space-x-4">
@@ -33,20 +38,20 @@ import { User } from '../../models/models';
   `
 })
 export class HeaderComponent implements OnInit {
-    currentUser: User | null = null;
-    showAdminBoard = false;
+  currentUser: User | null = null;
+  showAdminBoard = false;
 
-    constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
-    ngOnInit(): void {
-        this.authService.currentUser.subscribe(user => {
-            this.currentUser = user;
-            this.showAdminBoard = user?.roles.includes('ROLE_ADMIN') || user?.roles.includes('ROLE_MODERATOR') || false;
-        });
-    }
+  ngOnInit(): void {
+    this.authService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this.showAdminBoard = user?.roles.includes('ROLE_ADMIN') || user?.roles.includes('ROLE_MODERATOR') || false;
+    });
+  }
 
-    logout(): void {
-        this.authService.logout();
-        this.router.navigate(['/login']);
-    }
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

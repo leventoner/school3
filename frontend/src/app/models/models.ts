@@ -11,7 +11,7 @@ export enum Course {
     CLOUD_COMPUTING = "CLOUD_COMPUTING"
 }
 
-export enum Grade {
+export enum GradeValue {
     A = "A",
     B = "B",
     C = "C",
@@ -46,4 +46,45 @@ export interface User {
     email: string;
     roles: string[];
     token: string;
+}
+
+export interface Teacher {
+    id?: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    specialization: string;
+}
+
+export interface Classroom {
+    id?: number;
+    roomNumber: string;
+    capacity: number;
+    roomType: string;
+    floor: number;
+}
+
+export interface Book {
+    id?: number;
+    title: string;
+    author: string;
+    isbn: string;
+    category: string;
+    status: string;
+}
+
+export interface Attendance {
+    id?: number;
+    studentId: number;
+    date: string;
+    status: string;
+}
+
+export interface StudentGrade {
+    id?: number;
+    studentId: number;
+    subject: string;
+    score: number;
+    examDate: string;
 }

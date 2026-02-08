@@ -38,3 +38,49 @@ pub struct StudentWithCourses {
     pub student: Student,
     pub courses: Vec<StudentCourse>,
 }
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Teacher {
+    pub id: i32,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    pub email: Option<String>,
+    pub phone: Option<String>,
+    pub specialization: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Classroom {
+    pub id: i32,
+    pub room_number: String,
+    pub capacity: Option<i32>,
+    pub room_type: Option<String>,
+    pub floor: Option<i32>,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Book {
+    pub id: i32,
+    pub title: String,
+    pub author: Option<String>,
+    pub isbn: Option<String>,
+    pub category: Option<String>,
+    pub status: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Attendance {
+    pub id: i32,
+    pub student_id: i32,
+    pub date: String, // SQLX mappings for dates can be tricky, using String for simplicity or NaiveDate if configured
+    pub status: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Grade {
+    pub id: i32,
+    pub student_id: i32,
+    pub subject: String,
+    pub score: f64,
+    pub exam_date: String,
+}
