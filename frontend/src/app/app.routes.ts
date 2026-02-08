@@ -27,5 +27,6 @@ export const routes: Routes = [
     { path: 'update-book/:id', loadComponent: () => import('./components/add-book/add-book.component').then(m => m.AddBookComponent), canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'] } },
     { path: 'attendance', loadComponent: () => import('./components/attendance-list/attendance-list.component').then(m => m.AttendanceListComponent), canActivate: [AuthGuard] },
     { path: 'grades', loadComponent: () => import('./components/grade-list/grade-list.component').then(m => m.GradeListComponent), canActivate: [AuthGuard] },
+    { path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent), canActivate: [AuthGuard] },
     { path: '**', redirectTo: 'home' }
 ];

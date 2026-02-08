@@ -39,10 +39,10 @@ import { User } from '../../models/models';
             </li>
             
             <li *ngIf="currentUser" class="ml-6 flex items-center space-x-4 border-l pl-6 border-gray-200">
-               <div class="flex flex-col text-right">
-                  <span class="text-xs text-gray-500 uppercase font-bold tracking-wider">User</span>
-                  <span class="text-sm font-semibold text-gray-800 leading-none">{{ currentUser.username }}</span>
-               </div>
+               <a routerLink="/profile" class="flex flex-col text-right hover:opacity-80 transition cursor-pointer">
+                  <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">User</span>
+                  <span class="text-sm font-semibold text-slate-200 leading-none">{{ currentUser.username }}</span>
+               </a>
               <button (click)="logout()" class="p-2 text-gray-400 hover:text-red-600 transition" title="Logout">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
