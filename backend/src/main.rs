@@ -57,6 +57,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Seed data
     seed::seed_data(&pool).await?;
+    
     // CORS configuration
     let cors = CorsLayer::new()
         .allow_origin(Any)
@@ -72,6 +73,10 @@ async fn main() -> anyhow::Result<()> {
         .route("/api/students/", get(get_all_students).post(create_student))
         .route("/api/students/:id", get(get_student).put(update_student).delete(delete_student))
         .route("/api/teachers", get(get_all_teachers).post(create_teacher))
+        
+        // Fix: Explicitly handle trailing slash for teachers
+        .route("/api/teachers/", get(get_all_teachers).post(create_teacher))
+        
         .route("/api/teachers/:id", get(get_teacher).put(update_teacher).delete(delete_teacher))
         .route("/api/classrooms", get(get_all_classrooms).post(create_classroom))
         .route("/api/classrooms/:id", get(get_classroom).put(update_classroom).delete(delete_classroom))
